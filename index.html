@@ -232,14 +232,15 @@
   }
 
   /* ---- FULL LETTER OVERLAY ---- */
-  .letter-page {
-    position: fixed; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    z-index: 100;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.6s ease 0.1s;
-    padding: 20px;
-  }
+.letter-page {
+  position: fixed; inset: 0;
+  display: flex; align-items: flex-start; justify-content: center;
+  z-index: 100;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.6s ease 0.1s;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
 
   .letter-page.visible { opacity: 1; pointer-events: all; }
 
@@ -249,39 +250,32 @@
     backdrop-filter: blur(8px);
   }
 
-  .letter-content {
-    position: relative; z-index: 2;
-    width: 100%; max-width: 480px;
-    background: var(--letter-bg);
-    border-radius: 6px;
-    padding: 48px 48px 36px;
-    box-shadow:
-      0 40px 100px rgba(0,0,0,0.65),
-      0 0 0 1px rgba(192, 132, 252, 0.18),
-      0 0 60px rgba(192, 132, 252, 0.06);
-    animation: letterReveal 0.7s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  @keyframes letterReveal {
-    from { transform: translateY(30px) scale(0.96); opacity: 0; }
-    to   { transform: translateY(0)    scale(1);    opacity: 1; }
-  }
-
-.letter-content::before {
-  content: '';
+  .letter-lines-bg {
   position: absolute;
   left: 0; right: 0;
   top: 96px;
-  height: 1075px;
+  bottom: 0;
   background: repeating-linear-gradient(
     transparent, transparent 33px,
     var(--letter-lines) 33px, var(--letter-lines) 34px
   );
-  border-radius: 6px;
   pointer-events: none;
+  z-index: 0;
 }
+
+.letter-content {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 480px;
+  background: var(--letter-bg);
+  border-radius: 6px;
+  padding: 48px 48px 36px;
+  box-shadow:
+    0 40px 100px rgba(0,0,0,0.65),
+    0 0 0 1px rgba(192, 132, 252, 0.18),
+    0 0 60px rgba(192, 132, 252, 0.06);
+  animation: letterReveal 0.7s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+}
+
 .letter-date {
   font-style: italic;
   color: var(--ink-light);
@@ -446,6 +440,12 @@
     color: rgba(160, 120, 220, 0.3);
     pointer-events: none;
   }
+
+  .letter-content > *:not(.letter-lines-bg) {
+  position: relative;
+  z-index: 1;
+}
+
 </style>
 </head>
 <body>
@@ -466,6 +466,7 @@
 <div class="letter-page" id="letterPage">
   <div class="letter-page-bg"></div>
   <div class="letter-content">
+    <div class="letter-lines-bg"></div>
     <div class="letter-date">March, 2026</div>
 
     <div class="letter-salutation">Dear <span style="color: #c084fc;">Bethany</span>,</div>
